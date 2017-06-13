@@ -34,7 +34,6 @@ const movieList = [{
   title: '电影5'
 }];
 
-
 export default {
   components: {
     Swiper

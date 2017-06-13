@@ -43,10 +43,7 @@ export default {
       scrollTop: 0,
       onFetching: false,
       bottomCount: 20,
-      hotMovies: hotMovies,
-      el: '',
-      startY: '',
-      endY: ''
+      hotMovies: hotMovies
     }
   },
   computed: {
@@ -54,33 +51,24 @@ export default {
       'isScroll'
     ])
   },
-  created () {
-    /* showMovies().then(response => {
-      let data = response.movies;
-      this.hotMovies = data.hotMovies;
-      data.hotMovies.forEach((item, index) => {
-        this.hotMovies.push(item)
-      })
-    }) */
-  },
   mounted () {
     this.$nextTick(() => {
       this.$refs.scrollerBottom.reset({top: 0})
     })
-    this.el = document.getElementById('moviesList')
-    this.el.ontouchstart = e => {
-      this.touchStart(e)
-    }
-    this.el.ontouchmove = e => {
-      this.touchMove(e)
-    }
   },
   methods: {
     ...mapMutations([
       'saveScrollStatus'
     ]),
     onScroll (pos) {
-      this.scrollTop = pos.top
+      this.scrollTop = pos.top;
+      if (this.scrollTop  > 0) { // 上拉
+        this.saveScrollStatus(1)  // 隐藏轮播图
+      } else { // 下拉
+        if(this.scrollTop <= 0) {
+          this.saveScrollStatus(0) // 显示轮播图
+        }
+      }
     },
     onScrollBottom () {
       if (this.onFetching) {
@@ -98,25 +86,6 @@ export default {
           })
           this.onFetching = false
         }, 2000)
-      }
-    },
-    touchStart (e) {
-      let touch = e.touches[0]
-      this.startY = touch.pageY
-    },
-    touchMove (e) {
-      let touch = e.touches[0]
-      let deltaY = 0
-      this.endY = touch.pageY
-
-      deltaY = this.endY - this.startY
-
-      if (deltaY < 0) { // 上拉
-        this.saveScrollStatus(1)  // 隐藏轮播图
-      } else { // 下拉
-        if(this.scrollTop <= 0) {
-          this.saveScrollStatus(0) // 显示轮播图
-        }
       }
     }
   }
@@ -137,5 +106,4 @@ export default {
   .scroll-list {
     top: 146px;
   }
-
 </style>

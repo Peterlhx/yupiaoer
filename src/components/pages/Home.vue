@@ -2,7 +2,7 @@
   <div class="home">
     <top-bar></top-bar>
     <search-input></search-input>
-    <swiper v-show="isScroll !== 1"></swiper>
+    <swiper v-show="isScroll !== 1" v-if="viewIndex === 0"></swiper>
     <movie-content v-if="viewIndex === 0"></movie-content>
     <bottom-bar></bottom-bar>
   </div>
